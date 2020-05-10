@@ -1,7 +1,8 @@
 # You may exclude certain drives (separate with a pipe)
 # Example: exclude = 'MyBook' or exclude = 'MyBook|WD Passport'
 # Set as something obscure to show all drives (strange, but easier than editing the command)
-exclude   = 'NONE'
+# exclude   = 'NONE'
+exclude   = 'recovery|vm'
 
 # Use base 10 numbers, i.e. 1GB = 1000MB. Leave this true to show disk sizes as
 # OS X would (since Snow Leopard)
@@ -23,7 +24,7 @@ bgOpacity    = 0.1
 maxDisks: 10
 
 
-command: "df -#{if base10 then 'H' else 'h'} | grep '/dev/' | while read -r line; do fs=$(echo $line | awk '{print $1}'); name=$(diskutil info $fs | grep 'Volume Name' | awk '{print substr($0, index($0,$3))}'); echo $(echo $line | awk '{print $2, $3, $4, $5}') $(echo $name | awk '{print substr($0, index($0,$1))}'); done | grep -vE '#{exclude}'"
+command: "df -#{if base10 then 'H' else 'h'}  | grep -vE '#{exclude}' | grep '/dev/' | while read -r line; do fs=$(echo $line | awk '{print $1}'); name=$(diskutil info $fs | grep 'Volume Name' | awk '{print substr($0, index($0,$3))}'); echo $(echo $line | awk '{print $2, $3, $4, $5}') $(echo $name | awk '{print substr($0, index($0,$1))}'); done"
 
 refreshFrequency: 60000
 
